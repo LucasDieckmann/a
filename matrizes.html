@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio de Matrizes</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .math-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .timer {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .matrix {
+            display: inline-block;
+            margin: 10px;
+            border-collapse: collapse;
+        }
+        .matrix td {
+            padding: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body class="p-6">
+    <div class="max-w-4xl mx-auto">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-3xl font-bold">Desafio de Matrizes</h1>
+            <div class="timer">
+                <span id="timer" class="text-xl font-bold">30</span>
+            </div>
+        </div>
+
+        <div class="math-card rounded-xl p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Problema:</h2>
+            <div id="problem" class="text-xl mb-6">Carregando problema...</div>
+            
+            <div class="mb-6">
+                <label for="answer" class="block mb-2 font-medium">Sua resposta:</label>
+                <input type="text" id="answer" class="w-full p-3 rounded bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+            
+            <button id="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded transition">
+                Enviar
+            </button>
+            
+            <div id="feedback" class="mt-4 hidden"></div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis do jogo
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        let currentProblem = {};
+        
+        // Elementos DOM
+        const problemElement = document.getElementById('problem');
+        const answerElement = document.getElementById('answer');
+        const submitButton = document.getElementById('submit');
+        const feedbackElement = document.getElementById('feedback');
+        const timerElement = document.getElementById('timer');
+        
+        // Gerar matriz HTML
+        function generateMatrix(matrix) {
+            let html = '<table class="matrix">';
+            for (let i = 0; i < matrix.length; i++) {
+                html += '<tr>';
+                for (let j = 0; j < matrix[i].length; j++) {
+                    html += `<td>${matrix[i][j]}</td>`;
+                }
+                html += '</tr>';
+            }
+            html += '</table>';
+            return html;
+        }
+        
+        // Gerar problema de matrizes
+        function generateProblem() {
+            const problems = [
+                {
+                    question: "Calcule a soma das matrizes A e B:<br><br>A = " + 
+                              generateMatrix([[1, 2], [3, 4]]) + 
+                              "<br>B = " + 
+                              generateMatrix([[5, 6], [7, 8]]),
+                    answer: "6,8,10,12"
+                },
+                {
+                    question: "Calcule o produto das matrizes A e B:<br><br>A = " + 
+                              generateMatrix([[1, 2], [3, 4]]) + 
+                              "<br>B = " + 
+                              generateMatrix([[2, 0], [1, 2]]),
+                    answer: "4,4,10,8"
+                },
+                {
+                    question: "Calcule o determinante da matriz:<br><br>" + 
+                              generateMatrix([[3, 1], [2, 5]]),
+                    answer: "13"
+                },
+                {
+                    question: "Encontre a matriz transposta de:<br><br>" + 
+                              generateMatrix([[1, 2, 3], [4, 5, 6]]),
+                    answer: "1,4,2,5,3,6"
+                },
+                {
+                    question: "Resolva o sistema linear representado pela matriz aumentada:<br><br>" + 
+                              generateMatrix([[2, 3, 8], [1, 2, 5]]),
+                    answer: "1,2"
+                }
+            ];
+            
+            currentProblem = problems[Math.floor(Math.random() * problems.length)];
+            problemElement.innerHTML = currentProblem.question;
+            answerElement.value = '';
+            feedbackElement.classList.add('hidden');
+            
+            // Resetar timer
+            clearInterval(timer);
+            timeLeft = 30;
+            timerElement.textContent = timeLeft;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    feedbackElement.innerHTML = "Tempo esgotado! A resposta correta era: " + currentProblem.answer;
+                    feedbackElement.className = "mt-4 p-3 bg-red-600 rounded";
+                    feedbackElement.classList.remove('hidden');
+                    setTimeout(generateProblem, 3000);
+                }
+            }, 1000);
+        }
+        
+        // Verificar resposta
+        function checkAnswer() {
+            clearInterval(timer);
+            
+            const userAnswer = answerElement.value.trim();
+            const correctAnswer = currentProblem.answer;
+            
+            if (userAnswer === correctAnswer) {
+                feedbackElement.textContent = "Correto! +1 ponto";
+                feedbackElement.className = "mt-4 p-3 bg-green-600 rounded";
+                score++;
+            } else {
+                feedbackElement.innerHTML = `Incorreto! A resposta correta era: ${correctAnswer}`;
+                feedbackElement.className = "mt-4 p-3 bg-red-600 rounded";
+            }
+            
+            feedbackElement.classList.remove('hidden');
+            setTimeout(generateProblem, 3000);
+        }
+        
+        // Event listeners
+        submitButton.addEventListener('click', checkAnswer);
+        answerElement.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                checkAnswer();
+            }
+        });
+        
+        // Iniciar jogo
+        generateProblem();
+    </script>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio Matemático Avançado</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .choice-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        .choice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center">
+    <div class="text-center p-8 max-w-2xl">
+        <h1 class="text-4xl font-bold mb-6">Desafio Matemático Avançado</h1>
+        <p class="mb-10 text-lg">Escolha o tipo de problemas que deseja resolver:</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="trigonometria.html" class="choice-card rounded-xl p-8 cursor-pointer">
+                <h2 class="text-2xl font-bold mb-3">Trigonometry</h2>
+                <p>Problemas envolvendo seno, cosseno, tangente e outras funções trigonométricas</p>
+            </a>
+            
+            <a href="matrizes.html" class="choice-card rounded-xl p-8 cursor-pointer">
+                <h2 class="text-2xl font-bold mb-3">Matrizes</h2>
+                <p>Problemas envolvendo operações com matrizes, determinantes e sistemas lineares</p>
+            </a>
+        </div>
+    </div>
+</body>
+</html>
